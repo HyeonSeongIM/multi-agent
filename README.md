@@ -21,7 +21,8 @@ agents.md 파일을 주고 작동하게 하면 된다고 생각합니다. 추후
 현재는 오픈클로로 시작했습니다.
 
 ## 아키텍처
-![스크린샷 2026-05-22 오후 1.14.26.png](../../../../var/folders/y8/jpgs3d8n3jg_g232vtyn_2q80000gn/T/TemporaryItems/NSIRD_screencaptureui_pnldSz/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202026-05-22%20%EC%98%A4%ED%9B%84%201.14.26.png)
+<img width="779" height="628" alt="스크린샷 2026-05-22 오후 1 21 10" src="https://github.com/user-attachments/assets/2c6da65e-2ecf-4a80-999f-a5d95265bddf" />
+
 
 ## 각 에이전트 별 역할
 ### 관리 측면
