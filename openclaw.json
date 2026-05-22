@@ -1,0 +1,132 @@
+{
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "google/gemini-3-flash-preview"
+      },
+      "models": {
+        "google/gemini-3.1-pro-preview": {},
+        "google/gemini-3-flash-preview": {}
+      }
+    },
+    "list": [
+      {
+        "id": "orchestrator",
+        "workspace": "~/.openclaw/workspace-orchestrator"
+      },
+      {
+        "id": "logAnalysis",
+        "workspace": "~/.openclaw/workspace-logAnalysis"
+      },
+      {
+        "id": "dataAnalysis",
+        "workspace": "~/.openclaw/workspace-dataAnalysis"
+      },
+      {
+        "id": "monitoring",
+        "workspace": "~/.openclaw/workspace-monitoring"
+      },
+      {
+        "id": "urgentAlert",
+        "workspace": "~/.openclaw/workspace-urgentAlert"
+      }
+    ]
+  },
+  "bindings": [
+    { "agentId": "orchestrator", "match": { "channel": "telegram", "accountId": "hyeonOrchestrator_bot" } },
+    { "agentId": "logAnalysis",  "match": { "channel": "telegram", "accountId": "hyeonLogAnalysis_bot" } },
+    { "agentId": "dataAnalysis", "match": { "channel": "telegram", "accountId": "hyeonDataAnalysis_bot" } },
+    { "agentId": "monitoring",   "match": { "channel": "telegram", "accountId": "hyeonMonitoring_bot" } },
+    { "agentId": "urgentAlert",  "match": { "channel": "telegram", "accountId": "hyeonUrgentAlert_bot" } }
+  ],
+  "gateway": {
+    "mode": "local",
+    "auth": {
+      "mode": "token",
+      "token": ""
+    },
+    "port": ,
+    "bind": "loopback",
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    },
+    "controlUi": {
+      "allowInsecureAuth": true
+    },
+    "nodes": {
+      "denyCommands": [
+        "camera.snap",
+        "camera.clip",
+        "screen.record",
+        "contacts.add",
+        "calendar.add",
+        "reminders.add",
+        "sms.send",
+        "sms.search"
+      ]
+    }
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "tools": {
+    "profile": "coding",
+    "web": {
+      "search": {
+        "provider": "gemini",
+        "enabled": true
+      }
+    }
+  },
+  "plugins": {
+    "entries": {
+      "google": {
+        "enabled": true,
+        "config": {
+          "webSearch": {
+            "apiKey": ""
+          }
+        }
+      },
+      "telegram": {
+        "enabled": true
+      }
+    }
+  },
+  "auth": {
+    "profiles": {
+      "google:default": {
+        "provider": "google",
+        "mode": "api_key"
+      }
+    }
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "groups": {
+        "*": {
+          "requireMention": true
+        }
+      },
+      "accounts": {
+        "hyeonOrchestrator_bot": { "botToken": "" },
+        "hyeonLogAnalysis_bot":  { "botToken": "" },
+        "hyeonDataAnalysis_bot": { "botToken": "" },
+        "hyeonMonitoring_bot":   { "botToken": "" },
+        "hyeonUrgentAlert_bot":  { "botToken": "" }
+      }
+    }
+  },
+  "wizard": {
+    "lastRunAt": "2026-05-19T03:03:47.240Z",
+    "lastRunVersion": "2026.5.18",
+    "lastRunCommand": "onboard",
+    "lastRunMode": "local"
+  },
+  "meta": {
+    "lastTouchedVersion": "2026.5.18",
+    "lastTouchedAt": "2026-05-19T03:03:47.488Z"
+  }
+}
