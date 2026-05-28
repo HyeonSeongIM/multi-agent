@@ -33,19 +33,15 @@
     ]
   },
   "bindings": [
-    { "agentId": "orchestrator", "match": { "channel": "telegram", "accountId": "hyeonOrchestrator_bot" } },
-    { "agentId": "logAnalysis",  "match": { "channel": "telegram", "accountId": "hyeonLogAnalysis_bot" } },
-    { "agentId": "dataAnalysis", "match": { "channel": "telegram", "accountId": "hyeonDataAnalysis_bot" } },
-    { "agentId": "monitoring",   "match": { "channel": "telegram", "accountId": "hyeonMonitoring_bot" } },
-    { "agentId": "urgentAlert",  "match": { "channel": "telegram", "accountId": "hyeonUrgentAlert_bot" } }
+    { "agentId": "orchestrator", "match": { "channel": "telegram", "accountId": "hyeonOrchestrator_bot" } }
   ],
   "gateway": {
     "mode": "local",
     "auth": {
       "mode": "token",
-      "token": ""
+      "token": "5101216fd510c34743ae2806bdf6fee49e260c1738282d5e"
     },
-    "port": ,
+    "port": 18789,
     "bind": "loopback",
     "tailscale": {
       "mode": "off",
@@ -85,7 +81,7 @@
         "enabled": true,
         "config": {
           "webSearch": {
-            "apiKey": ""
+            "apiKey": "AIzaSyDVB1nFjRxbjm4QpK_Y1mxVcjspsXTNd0I"
           }
         }
       },
@@ -111,11 +107,7 @@
         }
       },
       "accounts": {
-        "hyeonOrchestrator_bot": { "botToken": "" },
-        "hyeonLogAnalysis_bot":  { "botToken": "" },
-        "hyeonDataAnalysis_bot": { "botToken": "" },
-        "hyeonMonitoring_bot":   { "botToken": "" },
-        "hyeonUrgentAlert_bot":  { "botToken": "" }
+        "hyeonOrchestrator_bot": { "botToken": "8828131305:AAHROFy-3jMeZvSkN49p4P5tlnCJvOFiV7c" }
       }
     }
   },
