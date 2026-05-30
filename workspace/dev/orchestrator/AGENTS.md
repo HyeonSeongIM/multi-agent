@@ -99,6 +99,11 @@ On Backend Docs Agent success:
 - Update DynamoDB: `agents.backend-docs: "success"`
 - Proceed to Step 4
 
+On Backend Docs Agent partial (some REST Docs tests failed):
+- Update DynamoDB: `agents.backend-docs: "partial"`
+- Proceed to Step 4 — partial spec is still usable
+  Frontend Agent will only process endpoints marked `x-tested: true`
+
 On Backend Docs Agent failure:
 - Update DynamoDB: `agents.backend-docs: "failed"`, `status: "failed"`
 - Send Slack notification to #dev-alerts
@@ -111,8 +116,12 @@ Pass the following context to the Frontend Agent:
   "runId": "run-{timestamp}",
   "apiSpecPath": "runs/{runId}/api-spec.json",
   "frontendRepoUrl": "https://github.com/org/frontend.git",
-  "targetBranch": "main"
+  "targetBranch": "main",
+  "defaultReviewers": ["HyeonSeong"]
 }
+<!-- 리뷰어 추가가 필요할 경우 배열에 GitHub 유저네임을 추가:
+     - Claude 코드리뷰 봇: "claude-review-bot" (GitHub App 설치 필요)
+     - 추가 인원: 해당 GitHub 유저네임 -->
 ```
 
 Invocation: synchronous — wait for completion signal before proceeding.
@@ -154,4 +163,5 @@ Run: {runId}
 - Do not intervene in agent internals
   Read success/failure signals only
 - Every state change must be written to DynamoDB with a timestamp
-- Never pass unverified or partial results downstream
+- Never pass empty or completely failed specs downstream
+  Partial specs (some endpoints excluded) are allowed — label them clearly

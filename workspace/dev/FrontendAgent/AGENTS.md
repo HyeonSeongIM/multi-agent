@@ -17,12 +17,19 @@ No hand-holding. No waiting for approval mid-task.
     "runId": "run-{timestamp}",
     "apiSpecPath": "runs/{runId}/api-spec.json",
     "frontendRepoUrl": "https://github.com/org/frontend.git",
-    "targetBranch": "main"
+    "targetBranch": "main",
+    "defaultReviewers": ["HyeonSeong"]
   }
+  <!-- 리뷰어 추가가 필요할 경우 배열에 GitHub 유저네임을 추가:
+       - Claude 코드리뷰 봇: "claude-review-bot" (GitHub App 설치 필요)
+       - 추가 인원: 해당 GitHub 유저네임 -->
 ```
 - Read `api-spec.json` from S3 staging bucket using `apiSpecPath`
-- Only process endpoints marked `"x-tested": true`
-- If no endpoints marked `x-tested: true` → abort, report "failed" to Orchestrator Agent
+- Check `x-source` field to determine spec origin:
+  - `"rest-docs"`: process only endpoints marked `x-tested: true`
+    If zero `x-tested: true` endpoints → abort, report "failed" to Orchestrator Agent
+  - `"swagger"`: process all endpoints (all will be `x-tested: false`)
+    Add a PR note: "This spec is annotation-derived, not test-verified. Review carefully."
 
 ## What You Generate
 For every changed or new endpoint in the spec, generate ALL of the following:
@@ -70,8 +77,14 @@ For every changed or new endpoint in the spec, generate ALL of the following:
     - Branch name: `auto/api-sync-{runId}`
 3. Commit all generated files:
     - Commit message: `chore: auto-sync API {endpoint list} (runId: {runId})`
-4. Run TypeScript compile check before pushing:tsc --noEmit
-   If compile fails → fix or abort. Never push broken types.
+4. Run TypeScript compile check before pushing: `tsc --noEmit`
+   If compile fails, identify the error source:
+   - Error on a field marked `x-inferred: true` → change the type to `unknown` and add comment
+     `// inferred — type uncertain, verify manually`
+   - Error caused by your own generated code (wrong type shape) → fix the generated file and re-run tsc once
+   - Error in existing project files outside your generated scope → abort immediately, do not touch those files
+   - tsc still fails after one fix attempt → abort, report "failed" to Orchestrator Agent
+   Never push broken types.
 5. Push branch to remote
 6. Create PR via GitHub API:
     - Title: `🤖 [Auto] API Sync — {changed endpoint list}`
@@ -88,7 +101,8 @@ For every changed or new endpoint in the spec, generate ALL of the following:
     runId: {runId}
     commit: {commitSha}
     Labels: `auto-generated`, `needs-review`
-    Assign default reviewers automatically
+    Reviewers: assign from `defaultReviewers` passed in input
+               If `defaultReviewers` is empty → create PR without reviewers
 
 ## Save & Signal
 - Save result to S3: `runs/{runId}/frontend-result.json`
@@ -106,7 +120,8 @@ For every changed or new endpoint in the spec, generate ALL of the following:
 
 ## Abort Conditions
 Abort immediately and report "failed" to Orchestrator Agent if:
-- `api-spec.json` contains zero endpoints marked `x-tested: true`
+- `x-source` is `"rest-docs"` and zero endpoints are marked `x-tested: true`
+- `api-spec.json` contains zero total endpoints (regardless of source)
 - Frontend repo clone fails
 - `tsc --noEmit` fails and cannot be resolved
 - GitHub PR API call fails 3 times consecutively
